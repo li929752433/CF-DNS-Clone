@@ -3543,7 +3543,11 @@ async function fetchThreeNetworkIps(source, systemDomains, log) {
       switch (source) {
           case 'api.uouin.com':
               url = _d([104,116,116,112,115,58,47,47,97,112,105,46,117,111,117,105,110,46,99,111,109,47,99,108,111,117,100,102,108,97,114,101,46,104,116,109,108]);
-              strategy = ALL_STRATEGIES['phantomjs_cloud_interactive'];
+              strategy = async (u) => {
+                  const res = await fetch(u, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+                  if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                  return res.text();
+              };
               break;
           case 'wetest.vip':
               url = _d([104,116,116,112,115,58,47,47,119,119,119,46,119,101,116,101,115,116,46,118,105,112,47,112,97,103,101,47,99,108,111,117,100,102,108,97,114,101,47,97,100,100,114,101,115,115,95,118,52,46,104,116,109,108]);
